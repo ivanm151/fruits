@@ -1,0 +1,1 @@
+const supabaseUrl = 'https://qxxqxxqxxqxxqxxqxxqxxqxxqxxqxxqxx.supabase.co'
