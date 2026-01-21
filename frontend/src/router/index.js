@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import FruitView from "../views/FruitView.vue";
 
 const routes = [
-    { path: '/', redirect: '/test' },
+    { path: '/', redirect: '/fruit' },
     { path: '/fruit', component: FruitView },
 ];
 
