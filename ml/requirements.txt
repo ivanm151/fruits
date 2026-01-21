@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+torch
+torchvision
+segmentation_models_pytorch
+albumentations
+pillow
+numpy
+opencv-python-headless
+python-multipart
+git+https://github.com/ChaoningZhang/MobileSAM.git
