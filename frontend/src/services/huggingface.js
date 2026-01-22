@@ -1,4 +1,4 @@
-const HF_BASE_URL = "https://ivanm151-fruits.hf.space";
+const HF_BASE_URL = import.meta.env.VITE_HF_BASE_URL;
 
 export async function predictFull({
                                       file,
