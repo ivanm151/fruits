@@ -1,16 +1,42 @@
-
-import { createRouter, createWebHistory } from 'vue-router';
-
-import FruitView from "../views/FruitView.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import AuthView from '../views/AuthView.vue'
+import MainView from '../views/MainView.vue'
 
 const routes = [
-    { path: '/', redirect: '/fruit' },
-    { path: '/fruit', component: FruitView },
-];
+    {
+        path: '/auth',
+        name: 'Auth',
+        component: AuthView,
+        meta: { requiresGuest: true } // только для неавторизованных
+    },
+    {
+        path: '/',
+        name: 'Main',
+        component: MainView,
+        meta: { requiresAuth: true } // только для авторизованных
+    },
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/auth'
+    }
+]
 
 const router = createRouter({
     history: createWebHistory(),
-    routes,
-});
+    routes
+})
 
-export default router;
+// Глобальная навигационная защита
+router.beforeEach((to, from, next) => {
+    const user = localStorage.getItem('user')
+
+    if (to.meta.requiresAuth && !user) {
+        next('/auth')
+    } else if (to.meta.requiresGuest && user) {
+        next('/')
+    } else {
+        next()
+    }
+})
+
+export default router

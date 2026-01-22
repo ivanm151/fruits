@@ -1,7 +1,11 @@
 <script setup>
 import { ref } from "vue";
 import { useFruitStore } from "../stores/fruitStore";
+import { useUserStore } from '../stores/user'
+import { useRouter } from 'vue-router'
 
+const userStore = useUserStore()
+const router = useRouter()
 const store = useFruitStore();
 
 const file = ref(null);
@@ -21,11 +25,18 @@ async function onPredict() {
     pointY: pointY.value,
   });
 }
+
+const signOut = () => {
+  userStore.signOut()
+  console.log('[MainView] Пользователь вышел')
+  router.push('/auth')
+}
 </script>
 
 <template>
   <div class="fruits-view">
-    <h1>Fruit prediction 🍎</h1>
+    <h1>Fruit prediction</h1>
+    <button @click="signOut">Выйти</button>
 
     <input type="file" accept="image/*" @change="onFileChange" />
 
