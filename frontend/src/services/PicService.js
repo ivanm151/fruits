@@ -1,16 +1,16 @@
 import { supabase } from './lib/supabase'
 
-// Загрузка фото
+// Загрузка фото в storage и возврат пути
 export const uploadPicture = async (file, userId) => {
     const fileExt = file.name.split('.').pop()
     const filePath = `${userId}/${Date.now()}.${fileExt}`
 
-    // 1. Загрузка в бакет
+    // 1. Загрузка файла в бакет 'pics'
     const { data: uploadData, error: uploadError } = await supabase.storage
         .from('pics')
         .upload(filePath, file, {
             cacheControl: '3600',
-            upsert: false
+            upsert: false,
         })
 
     if (uploadError) {
@@ -18,16 +18,11 @@ export const uploadPicture = async (file, userId) => {
         throw new Error(`Ошибка загрузки: ${uploadError.message}`)
     }
 
-    // ✅ Используем путь из ответа (на всякий случай)
-    const uploadedPath = uploadData?.path || filePath
-
-    // 2. Получаем публичную ссылку
-    const { data: { publicUrl } } = supabase.storage
-        .from('pics')
-        .getPublicUrl(uploadedPath)
+    // Возвращаем путь к загруженному файлу
+    return { filePath: uploadData.path }
 }
 
-// Получение фото пользователя
+// Получение фото пользователя с публичными URL
 export const fetchUserPics = async (userId) => {
     const { data, error } = await supabase
         .from('pics')
@@ -40,13 +35,15 @@ export const fetchUserPics = async (userId) => {
         throw error
     }
 
-    return data.map(pic => {
+    // Добавляем публичный URL для каждого изображения
+    return data.map((pic) => {
         const { data: { publicUrl } } = supabase.storage
             .from('pics')
             .getPublicUrl(pic.storage_path)
+
         return {
             ...pic,
-            publicUrl
+            publicUrl,
         }
     })
 }

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AuthView from '../views/AuthView.vue'
 import MainView from '../views/MainView.vue'
+import HistoryView from "../views/HistoryView.vue";
 
 const routes = [
     {
@@ -13,6 +14,12 @@ const routes = [
         path: '/',
         name: 'Main',
         component: MainView,
+        meta: { requiresAuth: true } // только для авторизованных
+    },
+    {
+        path: '/history',
+        name: 'History',
+        component: HistoryView,
         meta: { requiresAuth: true } // только для авторизованных
     },
     {
