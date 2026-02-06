@@ -77,60 +77,6 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style scoped>
-.auth-container {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  text-align: center;
-}
-
-.tabs {
-  display: flex;
-  margin-bottom: 20px;
-}
-
-.tabs button {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background: #f8f8f8;
-  cursor: pointer;
-}
-
-.tabs button.active {
-  background: #007bff;
-  color: white;
-  font-weight: bold;
-}
-
-.auth-form input {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.auth-form button {
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.auth-form button:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-.error {
-  color: red;
-  margin-top: 10px;
-  font-size: 14px;
-}
+<style scoped lang="scss">
+@use '../assets/styles/components/AuthView';
 </style>
