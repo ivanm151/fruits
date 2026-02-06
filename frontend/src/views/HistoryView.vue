@@ -45,6 +45,7 @@ onMounted(() => {
   <div class="history-view">
     <h1>История анализов</h1>
     <button @click="signOut">Выйти</button>
+    <button @click="$router.push('/')">На главную</button>
 
     <p v-if="loading">Загрузка...</p>
 
