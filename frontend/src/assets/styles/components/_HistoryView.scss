@@ -1,0 +1,75 @@
+@use '../variables' as *;
+@use '../base/typography' as *;
+@use "sass:color";
+
+.history-view {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacing-md;
+  text-align: center;
+}
+
+.text-h1 {
+  color: $color-headline;
+  margin-bottom: $spacing-md;
+}
+
+.predictions-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.prediction-item {
+  display: flex;
+  gap: $spacing-md;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: $border-radius-md;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: $padding-md;
+}
+
+.prediction-item__image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.empty {
+  margin: $spacing-md 0;
+  padding: $padding-md;
+  background-color: color.adjust($color-background-2, $lightness: 15%);
+  border-radius: $border-radius-md;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+// Мобильная адаптация
+@media (max-width: 480px) {
+  .history-view {
+    padding: $spacing-sm;
+  }
+
+  .prediction-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .prediction-item__image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .base-button {
+    width: 100%;
+    max-width: none;
+  }
+}

@@ -1,0 +1,87 @@
+@use '../variables' as *;
+@use '../base/typography' as *;
+@use "sass:color";
+
+.base-button {
+  width: 100%;
+  max-width: $button-width;
+  height: $button-height;
+  padding: $padding-sm $padding-md;
+  border-radius: $border-radius-md;
+  font-family: $font-family-primary;
+  font-size: $font-size-h4;
+  font-weight: $font-weight-bold;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+
+  // Основная (оранжевая)
+  &--primary {
+    background-color: $color-background-1;
+    color: $color-background-2;
+
+    &:not(&--disabled):hover {
+      background-color: color.adjust($color-background-1, $lightness: -10%);
+    }
+
+    &:not(&--disabled):active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Вторичная (зелёная)
+  &--secondary {
+    background-color: $color-background-2;
+    color: $text-color-primary;
+
+    &:not(&--disabled):hover {
+      background-color: color.adjust($color-background-2, $lightness: -10%);
+    }
+
+    &:not(&--disabled):active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Опасная (красная)
+  &--danger {
+    background-color: $color-items;
+    color: $color-background-2;
+
+    &:not(&--disabled):hover {
+      background-color: color.adjust($color-items, $lightness: -10%);
+    }
+
+    &:not(&--disabled):active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Состояние: отключено или загрузка
+  &--disabled {
+    background-color: color.adjust($color-background-1, $lightness: 20%);
+    color: color.adjust($color-background-2, $lightness: -20%);
+    cursor: not-allowed;
+    transform: none;
+
+    &.base-button--secondary {
+      background-color: color.adjust($color-background-2, $lightness: 20%);
+    }
+
+    &.base-button--danger {
+      background-color: color.adjust($color-items, $lightness: 20%);
+    }
+  }
+}
+
+// Мобильная адаптация
+@media (max-width: 480px) {
+  .base-button {
+    font-size: $font-size-h5;
+    height: $button-height - 5;
+    padding: $padding-sm $padding-md;
+    max-width: 100%;
+  }
+}

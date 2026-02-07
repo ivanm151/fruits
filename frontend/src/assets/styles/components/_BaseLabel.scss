@@ -1,0 +1,25 @@
+@use '../variables' as *;
+@use '../base/typography' as *;
+@use "sass:color";
+
+.base-label {
+  display: block;
+  font-family: $font-family-primary;
+  font-size: $font-size-h5;
+  font-weight: $font-weight-medium;
+  color: $text-color-primary;
+  margin-bottom: $spacing-xs;
+  cursor: pointer;
+
+  &__required {
+    color: $color-error;
+    margin-left: $spacing-xs;
+  }
+}
+
+// Мобильная адаптация
+@media (max-width: 480px) {
+  .base-label {
+    font-size: $font-size-h6;
+  }
+}

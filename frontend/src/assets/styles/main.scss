@@ -4,6 +4,13 @@
 @use './base/typography';
 
 // 2. Компоненты UI
+@use './components/BaseButton';
+@use './components/BaseInput';
+@use './components/BaseLabel';
+@use './components/ResultCard';
+@use './components/ImageMarker';
 
 // 3. Views
 @use './components/AuthView';
+@use './components/HistoryView';
+@use './components/MainView';

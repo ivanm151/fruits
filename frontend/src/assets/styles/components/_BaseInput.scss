@@ -1,0 +1,71 @@
+@use '../variables' as *;
+@use '../base/typography' as *;
+@use "sass:color";
+
+.base-input__wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: $input-width;
+}
+
+.base-input {
+  width: 100%;
+  height: $input-height;
+  padding: $padding-md;
+  font-family: $font-family-primary;
+  font-size: $font-size-h4;
+  color: $text-color-primary;
+  background-color: $color-background-2;
+  border: 2px solid $border-color;
+  border-radius: $border-radius-md;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $color-background-1;
+  }
+
+  &:disabled {
+    background-color: color.adjust($color-background-2, $lightness: 15%);
+    color: color.adjust($text-color-primary, $lightness: 30%);
+    cursor: not-allowed;
+    border-color: color.adjust($border-color, $lightness: 20%);
+  }
+
+  &::placeholder {
+    color: color.adjust($text-color-primary, $lightness: 40%);
+    font-weight: $font-weight-regular;
+  }
+
+  &--error {
+    border-color: $color-error;
+
+    &:focus {
+      border-color: $color-error;
+    }
+  }
+}
+
+.base-input__error {
+  margin-top: $spacing-xs;
+  font-size: $font-size-h6;
+  color: $color-error;
+  font-weight: $font-weight-medium;
+  height: 16px; // фиксированная высота, чтобы не прыгал интерфейс
+  text-align: left;
+}
+
+// Мобильная адаптация
+@media (max-width: 480px) {
+  .base-input {
+    font-size: $font-size-h5;
+    height: $input-height - 5;
+    padding: $padding-sm $padding-md;
+  }
+
+  .base-input__error {
+    font-size: $font-size-h6;
+  }
+}

@@ -26,38 +26,63 @@ export const useFruitStore = defineStore('fruit', () => {
                 croppedSize: 224,
             })
 
-            // Извлекаем данные
+            // Проверка на наличие данных о фруктах
+            if (!prediction || !prediction.fruit_top3 || prediction.fruit_top3.length === 0) {
+                throw new Error('Фрукт не распознан')
+            }
+
             const topFruit = prediction.fruit_top3[0]
             const fruit = topFruit.fruit
             const confidence_1 = topFruit.confidence
-            const freshness = prediction.freshness
-            const isFresh = !freshness.toLowerCase().includes('rotten')
-            const confidence_2 = prediction.freshness_confidence
-            const cropped_base64 = prediction.cropped_base64
 
-            // Сохраняем временный результат (до загрузки)
+            // --- ОПРЕДЕЛЕНИЕ СВЕЖЕСТИ ---
+            let isFresh = null
+            let confidence_2 = prediction.freshness_confidence ?? 0
+            let freshness = prediction.freshness
+
+            if (freshness === null || freshness === undefined) {
+                // Свежесть не определена для этого фрукта
+                console.log(`[fruitStore] Свежесть не определена для фрукта: ${fruit}`)
+            } else if (typeof freshness === 'string') {
+                isFresh = !freshness.toLowerCase().includes('rotten')
+            } else {
+                console.warn('[fruitStore] Неожиданный тип freshness:', typeof freshness)
+            }
+
+            const cropped_base64 = prediction.cropped_base64 || null
+
+            // Сохраняем результат
             result.value = {
                 fruit,
                 confidence_1,
-                isFresh,
+                isFresh, // может быть true, false, null
                 confidence_2,
                 cropped_base64,
+                freshnessStatus: isFresh === null
+                    ? 'unknown'
+                    : isFresh ? 'fresh' : 'rotten'
             }
 
-            // Шаг 2: Загрузка исходного файла в storage
+            // Проверка авторизации
+            if (!userStore.user?.id) {
+                throw new Error('Пользователь не авторизован')
+            }
+
             const userId = userStore.user.id
+
+            // Загрузка фото
             const { filePath } = await uploadPicture(file, userId)
 
-            // Шаг 3: Сохранение в таблицу `pics`
+            // Сохранение в БД
             const { data, error: dbError } = await supabase
                 .from('pics')
                 .insert([
                     {
                         user_id: userId,
                         storage_path: filePath,
-                        mask: cropped_base64, // или использовать как base64-изображение
+                        mask: cropped_base64,
                         fruit,
-                        isFresh,
+                        isFresh, // сохраняем как NULL, если не определено
                         confidence_1,
                         confidence_2,
                     },

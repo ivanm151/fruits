@@ -13,12 +13,6 @@
   box-sizing: border-box;
 }
 
-.text-h1 {
-  color: $color-headline;
-  margin-bottom: $spacing-md;
-  text-align: center;
-}
-
 .tabs {
   display: flex;
   gap: $spacing-sm;
@@ -26,93 +20,39 @@
   width: 100%;
   max-width: $button-width;
   justify-content: center;
-}
 
-.tabs button {
-  background-color: transparent;
-  border: 2px solid $border-color;
-  padding: $padding-sm $padding-md;
-  font-family: $font-family-primary;
-  font-size: $font-size-h5;
-  font-weight: $font-weight-medium;
-  color: $text-color-primary;
-  cursor: pointer;
-  border-radius: $border-radius-md;
-  transition: all 0.3s ease;
-  flex: 1;
-  max-width: 160px;
+  .base-button {
+    flex: 1;
+    max-width: 160px;
+    font-size: $font-size-h5;
 
-  &.active {
-    background-color: $color-background-1;
-    color: $color-background-2;
-    border-color: $color-background-1;
-  }
+    &.active {
+      background-color: $color-background-1;
+      color: $color-background-2;
+      border-color: $color-background-1;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-  &:hover:not(.active) {
-    background-color: color.adjust($color-background-2, $lightness: -5%);
+    &:not(.active) {
+      background-color: transparent;
+      border: 2px solid $border-color;
+    }
   }
 }
 
 .auth-form {
   width: 100%;
-  max-width: $button-width;
+  max-width: $input-width;
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
   margin-bottom: $spacing-md;
 }
 
-.auth-form input {
-  width: 100%;
-  height: $input-height;
-  padding: $padding-md;
-  font-family: $font-family-primary;
-  font-size: $font-size-h4;
-  color: $text-color-primary;
-  background-color: $color-background-2;
-  border: 2px solid $border-color;
-  border-radius: $border-radius-md;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: $color-background-1;
-  }
-
-  &::placeholder {
-    color: color.adjust($text-color-primary, $lightness: 20%);
-    font-weight: $font-weight-regular;
-  }
-}
-
-.auth-form button {
-  width: 100%;
-  height: $button-height;
-  background-color: $color-background-1;
-  color: $color-background-2;
-  font-family: $font-family-primary;
-  font-size: $font-size-h4;
-  font-weight: $font-weight-bold;
-  border: none;
-  border-radius: $border-radius-md;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-  margin-top: $spacing-sm;
-
-  &:disabled {
-    background-color: color.adjust($color-background-1, $lightness: 15%);
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  &:not(:disabled):hover {
-    background-color: color.adjust($color-background-1, $lightness: -10%);
-  }
-
-  &:not(:disabled):active {
-    transform: scale(0.98);
-  }
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
 }
 
 .error {
@@ -125,7 +65,7 @@
   margin-top: $spacing-sm;
   text-align: center;
   width: 100%;
-  max-width: $button-width;
+  max-width: $input-width;
   border: 1px solid color.adjust($color-error, $alpha: -0.7);
 }
 
@@ -138,12 +78,7 @@
   .tabs {
     flex-direction: column;
     align-items: stretch;
-    max-width: 100%;
-  }
-
-  .tabs button {
-    max-width: none;
-    text-align: center;
+    gap: $spacing-sm;
   }
 
   .auth-form,
@@ -151,12 +86,8 @@
     max-width: 100%;
   }
 
-  .text-h1 {
-    font-size: $font-size-h2;
-  }
-
-  .auth-form input,
-  .auth-form button {
+  .tabs .base-button {
+    max-width: none;
     font-size: $font-size-h5;
   }
 }

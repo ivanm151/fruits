@@ -1,0 +1,89 @@
+@use '../variables' as *;
+@use '../base/typography' as *;
+@use "sass:color";
+
+.result-card {
+  display: flex;
+  gap: $spacing-md;
+  align-items: flex-start;
+  background-color: $color-background-2;
+  padding: $padding-md;
+  margin: $spacing-md;
+  border-radius: $border-radius-md;
+  font-size: $font-size-h5;
+  border: 1px solid color.adjust($border-color, $alpha: -0.7);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+  &__image {
+    flex-shrink: 0;
+  }
+
+  &__img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid $border-color;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  p {
+    margin: $spacing-xs 0;
+    line-height: 1.6;
+  }
+
+  strong {
+    color: $text-color-primary;
+  }
+
+  ul {
+    margin: $spacing-xs 0;
+    padding-left: $spacing-md;
+    list-style: none;
+
+    li {
+      font-size: $font-size-h6;
+      color: color.adjust($text-color-primary, $lightness: -10%);
+    }
+  }
+}
+
+.result-card__freshness {
+  margin-left: $spacing-xs;
+
+  &.fresh {
+    color: darken(#4caf50, 10%);
+    font-weight: $font-weight-bold;
+  }
+
+  &.rotten {
+    color: darken(#ef5350, 10%);
+    font-weight: $font-weight-bold;
+  }
+
+  &.unknown {
+    color: $color-warning;
+    font-style: italic;
+  }
+}
+
+// Мобильная адаптация
+@media (max-width: 480px) {
+  .result-card {
+    flex-direction: column;
+    font-size: $font-size-h6;
+    padding: $padding-sm;
+  }
+
+  .result-card__image {
+    align-self: center;
+  }
+
+  .result-card__img {
+    width: 60px;
+    height: 60px;
+  }
+}
