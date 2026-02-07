@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { predictFull } from '../services/huggingface'
 import { uploadPicture } from '../services/picService'
 import { useUserStore } from './user'
-import { supabase } from '../services/lib/supabase'
 
 export const useFruitStore = defineStore('fruit', () => {
     const loading = ref(false)
@@ -17,7 +16,7 @@ export const useFruitStore = defineStore('fruit', () => {
         result.value = null
 
         try {
-            // Шаг 1: Предсказание от HF
+            // Шаг 1: Предсказание
             const prediction = await predictFull({
                 file,
                 pointX,
@@ -26,7 +25,6 @@ export const useFruitStore = defineStore('fruit', () => {
                 croppedSize: 224,
             })
 
-            // Проверка на наличие данных о фруктах
             if (!prediction || !prediction.fruit_top3 || prediction.fruit_top3.length === 0) {
                 throw new Error('Фрукт не распознан')
             }
@@ -35,66 +33,40 @@ export const useFruitStore = defineStore('fruit', () => {
             const fruit = topFruit.fruit
             const confidence_1 = topFruit.confidence
 
-            // --- ОПРЕДЕЛЕНИЕ СВЕЖЕСТИ ---
             let isFresh = null
             let confidence_2 = prediction.freshness_confidence ?? 0
             let freshness = prediction.freshness
 
-            if (freshness === null || freshness === undefined) {
-                // Свежесть не определена для этого фрукта
-                console.log(`[fruitStore] Свежесть не определена для фрукта: ${fruit}`)
+            if (freshness === null || typeof freshness === 'undefined') {
+                console.log(`[fruitStore] Свежесть не определена: ${fruit}`)
             } else if (typeof freshness === 'string') {
                 isFresh = !freshness.toLowerCase().includes('rotten')
-            } else {
-                console.warn('[fruitStore] Неожиданный тип freshness:', typeof freshness)
             }
 
             const cropped_base64 = prediction.cropped_base64 || null
 
-            // Сохраняем результат
             result.value = {
                 fruit,
                 confidence_1,
-                isFresh, // может быть true, false, null
+                isFresh,
                 confidence_2,
                 cropped_base64,
-                freshnessStatus: isFresh === null
-                    ? 'unknown'
-                    : isFresh ? 'fresh' : 'rotten'
+                freshnessStatus: isFresh === null ? 'unknown' : isFresh ? 'fresh' : 'rotten'
             }
 
-            // Проверка авторизации
-            if (!userStore.user?.id) {
-                throw new Error('Пользователь не авторизован')
-            }
+            if (!userStore.user?.id) throw new Error('Не авторизован')
 
             const userId = userStore.user.id
 
-            // Загрузка фото
+            // Шаг 2: Загрузка фото
             const { filePath } = await uploadPicture(file, userId)
 
-            // Сохранение в БД
-            const { data, error: dbError } = await supabase
-                .from('pics')
-                .insert([
-                    {
-                        user_id: userId,
-                        storage_path: filePath,
-                        mask: cropped_base64,
-                        fruit,
-                        isFresh, // сохраняем как NULL, если не определено
-                        confidence_1,
-                        confidence_2,
-                    },
-                ])
-                .select()
-
-            if (dbError) throw dbError
-
-            console.log('[fruitStore] Результат сохранён в БД:', data)
+            // Результат уже сохранён в БД через функцию? Да!
+            // Если `apiPredictFull` или `apiUploadPicture` сохраняют в БД — ничего больше не нужно
+            console.log('[fruitStore] Анализ завершён и сохранён на сервере')
         } catch (err) {
-            console.error('[fruitStore] Ошибка при предсказании:', err)
-            error.value = err.message || 'Ошибка распознавания'
+            console.error('[fruitStore] Ошибка:', err)
+            error.value = err.message || 'Ошибка анализа'
         } finally {
             loading.value = false
         }
