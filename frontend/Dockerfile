@@ -1,14 +1,21 @@
-# Stage 1: Build stage - используем Node.js 22
+# Stage 1: Build stage
 FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Копируем файлы зависимостей
+# Копируем все package файлы
 COPY package*.json ./
+
+# Устанавливаем зависимости
 RUN npm ci
 
-# Копируем исходники и собираем
+# Копируем ВСЕ исходники (важно!)
 COPY . .
+
+# Проверяем что скопировалось (для отладки)
+RUN ls -la src/services/ && ls -la src/stores/
+
+# Собираем проект
 RUN npm run build
 
 # Stage 2: Production stage
@@ -17,7 +24,7 @@ FROM nginx:alpine
 # Копируем собранные файлы
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Добавляем минимальный конфиг для SPA
+# Добавляем конфиг для SPA
 RUN echo 'server { \
     listen 80; \
     root /usr/share/nginx/html; \
