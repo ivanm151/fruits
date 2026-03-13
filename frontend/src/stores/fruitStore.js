@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { predictFull } from '../services/huggingface'
-import { uploadPicture } from '../services/picService'
+import { uploadPicture } from '../services/PicService'
 import { useUserStore } from './user'
 
 export const useFruitStore = defineStore('fruit', () => {
