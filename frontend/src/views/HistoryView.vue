@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useUserStore } from '../stores/user'
-import { fetchUserPics } from '../services/picService'
+import { fetchUserPics } from '../services/PicService'
 import { useRouter } from 'vue-router'
 import ResultCard from '../components/ResultCard.vue'
 import BaseButton from '../components/BaseButton.vue'
